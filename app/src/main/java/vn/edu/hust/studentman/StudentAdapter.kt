@@ -3,11 +3,17 @@ package vn.edu.hust.studentman
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class StudentAdapter(val students: List<StudentModel>): RecyclerView.Adapter<StudentAdapter.StudentViewHolder>() {
+class StudentAdapter(val students: List<StudentModel>, private val listener: OnItemClickListener): RecyclerView.Adapter<StudentAdapter.StudentViewHolder>() {
+  interface OnItemClickListener {
+    fun onEditClick(student: StudentModel, position: Int) // Xử lý sự kiện nhấn Edit
+    fun onRemoveClick(student: StudentModel,position: Int) // Xử lý sự kiện nhấn Remove
+  }
+
   class StudentViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     val textStudentName: TextView = itemView.findViewById(R.id.text_student_name)
     val textStudentId: TextView = itemView.findViewById(R.id.text_student_id)
@@ -28,5 +34,12 @@ class StudentAdapter(val students: List<StudentModel>): RecyclerView.Adapter<Stu
 
     holder.textStudentName.text = student.studentName
     holder.textStudentId.text = student.studentId
+
+    holder.imageEdit.setOnClickListener{
+        listener.onEditClick(student, position)
+    }
+    holder.imageRemove.setOnClickListener{
+        listener.onRemoveClick(student, position)
+    }
   }
 }
